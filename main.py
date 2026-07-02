@@ -85,9 +85,6 @@ def draw_grid():
         pygame.draw.line(window, (0,0,0), (line * tile_size, 0), (line * tile_size, height))
 
 player_spritesheet = pygame.image.load(os.path.join(images_directory, "Player_spritesheet.png"))
-player_frame = player_spritesheet.subsurface(32 * int(player_x_sprite), 32 * int(player_y_sprite), 32, 32)
-player_frame = pygame.transform.scale(player_frame, (35*1.5, 35*1.5))
-player_rect = player_frame.get_rect(center=(player_x_pos, player_y_pos))
 
 w = World(world_data)
 
@@ -96,12 +93,33 @@ while run:
     window.fill((175,175,255))
     w.draw()
 
+    player_frame = player_spritesheet.subsurface(32 * int(player_x_sprite), 32 * int(player_y_sprite), 32, 32)
+    player_frame = pygame.transform.scale(player_frame, (40, 40))
+    player_rect = player_frame.get_rect(center=(player_x_pos, player_y_pos))
+    
+    keys = pygame.key.get_pressed()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             run = False
             pygame.quit()
             sys.exit()
-            
 
+        if keys[pygame.K_d]:
+            player_y_sprite = 0
+
+            if player_x_sprite >= 4:
+                player_x_sprite = 0
+            else:
+                player_x_sprite += 0.75
+                
+        if keys[pygame.K_a]:
+            player_y_sprite = 1
+                
+            if player_x_sprite >= 4:
+                player_x_sprite = 0
+            else:
+                player_x_sprite += 0.75
+            
     window.blit(player_frame, player_rect)
     pygame.display.flip()
