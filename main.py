@@ -1,7 +1,9 @@
 import pygame, os, sys
 
-
 pygame.init()
+
+main_directory = os.path.dirname(__file__)
+images_directory = os.path.join(main_directory, "images")
 
 width = 700
 height = 700
@@ -17,7 +19,7 @@ class World:
     def __init__(self, data):
         self.tiles_list = []
 
-        tile_spritesheet = pygame.image.load(r'images\tiles_spritesheet.png')
+        tile_spritesheet = pygame.image.load(os.path.join(images_directory, "tiles_spritesheet.png"))
         img_grass = tile_spritesheet.subsurface(0,0,64,64)
         img_wall = tile_spritesheet.subsurface(0,64,64,64)
 
