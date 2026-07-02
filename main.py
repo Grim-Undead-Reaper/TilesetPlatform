@@ -1,5 +1,6 @@
 import pygame, os, sys
 
+
 pygame.init()
 
 main_directory = os.path.dirname(__file__)
@@ -7,6 +8,12 @@ images_directory = os.path.join(main_directory, "images")
 
 width = 700
 height = 700
+
+player_x_sprite = 0
+player_y_sprite = 0
+
+player_x_pos = 500
+player_y_pos = 500
 
 run = True
 
@@ -77,6 +84,11 @@ def draw_grid():
         pygame.draw.line(window, (0,0,0), (0, line * tile_size), (width, line * tile_size))
         pygame.draw.line(window, (0,0,0), (line * tile_size, 0), (line * tile_size, height))
 
+player_spritesheet = pygame.image.load(os.path.join(images_directory, "Player_spritesheet.png"))
+player_frame = player_spritesheet.subsurface(32 * int(player_x_sprite), 32 * int(player_y_sprite), 32, 32)
+player_frame = pygame.transform.scale(player_frame, (35*1.5, 35*1.5))
+player_rect = player_frame.get_rect(center=(player_x_pos, player_y_pos))
+
 w = World(world_data)
 
 while run:
@@ -89,5 +101,7 @@ while run:
             run = False
             pygame.quit()
             sys.exit()
+            
 
+    window.blit(player_frame, player_rect)
     pygame.display.flip()
