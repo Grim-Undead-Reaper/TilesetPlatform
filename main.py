@@ -1,6 +1,5 @@
 import pygame, os, sys
 
-
 pygame.init()
 
 main_directory = os.path.dirname(__file__)
@@ -27,8 +26,11 @@ class World:
         self.tiles_list = []
 
         tile_spritesheet = pygame.image.load(os.path.join(images_directory, "tiles_spritesheet.png"))
+        MrsPepper_spritesheet = pygame.image.load(os.path.join(images_directory, "MrsPepper_spritesheet.png"))
+
         img_grass = tile_spritesheet.subsurface(0,0,64,64)
         img_wall = tile_spritesheet.subsurface(0,64,64,64)
+        img_MrsPepper = MrsPepper_spritesheet.subsurface(0,0,32,32)
 
         row_count = 0
         for row in data:
@@ -48,6 +50,14 @@ class World:
                     grass_rect.y = row_count * tile_size
                     tile = (grass, grass_rect)
                     self.tiles_list.append(tile)
+                if tile == 3:
+                    MrsPepper = pygame.transform.scale(img_MrsPepper, (tile_size, tile_size))
+                    MrsPepper_rect = MrsPepper.get_rect()
+                    MrsPepper_rect.x = col_count * tile_size
+                    MrsPepper_rect.y = row_count * tile_size
+                    tile = (MrsPepper, MrsPepper_rect)
+                    self.tiles_list.append(tile)
+
                 col_count += 1
             row_count += 1
     
@@ -60,8 +70,8 @@ world_data = [
 [1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
-[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
+[1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,3,0,0,0,1],
+[1,0,0,0,0,0,0,0,0,0,0,0,0,2,2,1,2,0,0,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
 [1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1],
@@ -88,13 +98,16 @@ player_spritesheet = pygame.image.load(os.path.join(images_directory, "Player_sp
 
 w = World(world_data)
 
+clock = pygame.time.Clock()
+
 while run:
     os.system("cls")
+    clock.tick(60)
     window.fill((175,175,255))
     w.draw()
 
     player_frame = player_spritesheet.subsurface(32 * int(player_x_sprite), 32 * int(player_y_sprite), 32, 32)
-    player_frame = pygame.transform.scale(player_frame, (40, 40))
+    player_frame = pygame.transform.scale(player_frame, (50, 50))
     player_rect = player_frame.get_rect(center=(player_x_pos, player_y_pos))
     
     keys = pygame.key.get_pressed()
@@ -111,7 +124,7 @@ while run:
             if player_x_sprite >= 4:
                 player_x_sprite = 0
             else:
-                player_x_sprite += 0.75
+                player_x_sprite += 0.35
                 
         if keys[pygame.K_a]:
             player_y_sprite = 1
@@ -119,7 +132,7 @@ while run:
             if player_x_sprite >= 4:
                 player_x_sprite = 0
             else:
-                player_x_sprite += 0.75
+                player_x_sprite += 0.35
             
     window.blit(player_frame, player_rect)
     pygame.display.flip()
